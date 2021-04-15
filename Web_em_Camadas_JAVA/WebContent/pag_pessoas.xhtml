@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template.xhtml"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/templates/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+	    <ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		
+		<h:form id="formTabela">
+			<p:dataTable id="tabelaClientes" var="cliente" value="#{clienteBean.listaModelclientes}"
+			 		rows="5"
+		            paginator="true"
+		            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 	currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+		            rowsPerPageTemplate="5,10,15" 
+		            filteredValue="#{clienteBean.listaFilstradaModelClientes}"
+		            emptyMessage="Nenhuma pessoa cadastrada no banco de dados" >
+		            
+			    	<p:column filterBy="#{cliente.nome}" 
+			    	headerText="Nome" footerText="contains" 
+			    	filterMatchMode="contains" >
+			        	
+			        	<h:outputText value="#{cliente.nome}" />
+			   		</p:column>
+
+				 
+				    <p:column headerText="Idade">
+				        <h:outputText value="#{cliente.idade}" />
+				    </p:column>
+				 
+				    <p:column headerText="Sexo">
+				        <h:outputText value="#{cliente.sexo}" />
+				    </p:column>
+				    
+				    <p:column headerText="Cpf">
+				        <h:outputText value="#{cliente.cpf}" />
+				    </p:column>
+				    
+				    <p:column headerText="E-mail">
+				        <h:outputText value="#{cliente.email}" />
+				    </p:column>
+				    
+				    <p:column headerText="Telefone">
+				        <h:outputText value="#{cliente.telefone}" />
+				    </p:column>		
+				    
+			
+		       		<p:column headerText="Dietas">  
+		       			<center>         
+			            		<p:commandButton  icon="pi pi-pencil"
+			            		action = "./dietas.jsf"/>
+			            		
+			            </center>
+		       		</p:column>
+		       			    <p:column headerText="Alterar / Excluir">
+		            	<center>
+				            <p:commandButton icon="pi pi-pencil"
+				            	actionListener="#{clienteBean.PrepararUpdate}"
+					    		onclick="PF('dlgAlterarCliente').show()"
+					    		update=":fAlterar:pgAlterar" />
+				            	
+				            <p:commandButton icon="pi pi-trash" 
+				            	actionListener="#{clienteBean.PrepararDelete}"
+				            	onclick="PF('dlgExcluirCliente').show();"
+					    		update=":fExcluirCliente:pgExcluirCliente" />
+			    		</center>
+		       		</p:column>
+				    <f:facet name="footer">
+				    	<p:commandButton value="Novo cliente" icon="pi pi-user-plus"
+				    	actionListener="#{clienteBean.PrepararNovo}"
+				    	oncomplete="PF('dlgCadastrarCliente').show();"
+				    	update=":fCadastrar:pgCadastrar" />
+				    </f:facet>	        
+			</p:dataTable>
+		</h:form>
+		<p:dialog header="Cadastrar Cliente" widgetVar="dlgCadastrarCliente" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fCadastrar" >
+		        
+		        <p:outputPanel id="painelCadastrarCliente" style="text-align:center;">
+		            
+		            <p:panelGrid id="pgCadastrar" columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Nome" />
+		                <p:inputText value="#{clienteBean.cliente.nome}" />
+		                
+		                <h:outputText value="Idade" />
+		                <p:inputText value="#{clienteBean.cliente.idade}" />
+		                
+		                <h:outputText value="Sexo" />
+		                <p:inputText value="#{clienteBean.cliente.sexo}" />
+		                
+		                <h:outputText value="Cpf" />
+		                <p:inputText value="#{clienteBean.cliente.cpf}" />
+		 
+		                <h:outputText value="E-mail" />
+		                <p:inputText value="#{clienteBean.cliente.email}" />
+		                
+		                <h:outputText value="Telefone" />
+		                <p:inputText value="#{clienteBean.cliente.telefone}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Cadastrar" oncomplete="PF('dlgCadastrarCliente').hide();" 
+							actionListener="#{clienteBean.Insert}" 
+							update=":formTabela:tabelaClientes :msgGlobal"/>	
+						<p:commandButton value="Cancel" onclick="PF('dlgCadastrarCliente').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+		</p:dialog>
+		
+		<p:dialog header="Excluir Cliente" widgetVar="dlgExcluirCliente" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fExcluirCliente" >
+		        
+		        <p:outputPanel id="pgExcluirCliente" style="text-align:center;">
+		            
+		            <p:panelGrid  columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Nome" />
+		                <h:outputText value="#{clienteBean.cliente.nome}" />
+		                
+		                <h:outputText value="Idade" />
+		                <h:outputText value="#{clienteBean.cliente.idade}" />
+		                
+		                <h:outputText value="Sexo" />
+		                <h:outputText value="#{clienteBean.cliente.sexo}" />
+		                
+		                <h:outputText value="Cpf" />
+		                <h:outputText value="#{clienteBean.cliente.cpf}" />
+		 
+		                <h:outputText value="E-mail" />
+		                <h:outputText value="#{clienteBean.cliente.email}" />
+		                
+		                <h:outputText value="Telefone" />
+		                <h:outputText value="#{clienteBean.cliente.telefone}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Excluir" oncomplete="PF('dlgExcluirCliente').hide();" 
+							actionListener="#{clienteBean.Delete}" 
+							update=":formTabela:tabelaClientes :msgGlobal" />
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgExcluirCliente').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+ 		
+ 		<p:dialog header="Alterar Cliente" widgetVar="dlgAlterarCliente" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fAlterar" >
+		        
+		        <p:outputPanel id="pgAlterar" style="text-align:center;">
+		            
+		            <p:panelGrid columns="2" columnClasses="label,value">
+
+		               
+		                <h:outputText value="Nome" />
+		                <p:inputText value="#{clienteBean.cliente.nome}" />
+		                
+		                <h:outputText value="Idade" />
+		                <p:inputText value="#{clienteBean.cliente.idade}" />
+		                
+		                <h:outputText value="Sexo" />
+		                <p:inputText value="#{clienteBean.cliente.sexo}" />
+		                
+		                <h:outputText value="Cpf" />
+		                <p:inputText value="#{clienteBean.cliente.cpf}" />
+		 
+		                <h:outputText value="E-mail" />
+		                <p:inputText value="#{clienteBean.cliente.email}" />
+		                
+		                <h:outputText value="Telefone" />
+		                <p:inputText value="#{clienteBean.cliente.telefone}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Alterar" oncomplete="PF('dlgAlterarCliente').hide();" 
+							actionListener="#{clienteBean.Update}" 
+							update=":formTabela:tabelaClientes :msgGlobal"/>												
+						<p:commandButton value="Cancel" onclick="PF('dlgAlterarCliente').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+	</ui:define>
+	<ui:define name="rodape">
+	   <ui:include src="/templates/rodape.xhtml" />
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template.xhtml"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/templates/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+	    <ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		<h:form id="formTabela">
+			<p:dataTable id="tabelaDieta" var="dieta" value="#{dietaBean.listaDietas}"
+			 		rows="10"
+		            paginator="true"
+		            rowsPerPageTemplate="5,10,15" 
+		            emptyMessage="Nenhuma dieta cadastrada no banco de dados" >
+		            
+				    <p:column headerText="Refeição 1">
+				        <h:outputText value="#{dieta.refeicao_1}" />
+				    </p:column>
+				     
+				    <p:column headerText="Refeição 2">
+				        <h:outputText value="#{dieta.refeicao_2}" />
+				    </p:column>
+				    
+				    <p:column headerText="Refeição 3">
+				        <h:outputText value="#{dieta.refeicao_3}" />
+				    </p:column>
+				     
+				    <p:column headerText="Refeição 4">
+				        <h:outputText value="#{dieta.refeicao_4}" />
+				    </p:column>
+				    
+				    <p:column headerText="Refeição 5">
+				        <h:outputText value="#{dieta.refeicao_5}" />
+				    </p:column>
+				    
+				    <p:column headerText="*">
+		            
+			            <p:commandButton icon="pi pi-pencil"
+			            	actionListener="#{dietaBean.PrepararUpdate}"
+				    		onclick="PF('dlgAlterarDieta').show()"
+				    		update=":fAlterar:pgAlterar" />
+			            	
+			            <p:commandButton icon="pi pi-trash" 
+			            	actionListener="#{dietaBean.PrepararDelete}"
+			            	onclick="PF('dlgExcluirDieta').show();"
+				    		update=":fExcluirDieta:pgExcluirDieta" />
+			    		
+		       		</p:column>
+				    <f:facet name="footer">
+				    	<p:commandButton value="Nova dieta" icon="pi pi-user-plus"
+				    	actionListener="#{dietaBean.PrepararNovo}"
+				    	oncomplete="PF('dlgCadastrarDieta').show();"
+				    	update=":fCadastrar:pgCadastrar" />
+				    </f:facet>	        
+			</p:dataTable>
+		</h:form>
+		<p:dialog header="Cadastrar Dieta" widgetVar="dlgCadastrarDieta" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fCadastrar" >
+		        
+		        <p:outputPanel id="painelCadastrarDieta" style="text-align:center;">
+		            
+		            <p:panelGrid id="pgCadastrar" columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Refeição 1" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_1}" />
+		                
+		                <h:outputText value="Refeição 2" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_2}" />
+		                
+		                <h:outputText value="Refeição 3" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_3}" />
+		                
+		                <h:outputText value="Refeição 4" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_4}" />
+		                
+		                <h:outputText value="Refeição 5" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_5}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Cadastrar" oncomplete="PF('dlgCadastrarDieta').hide();" 
+							actionListener="#{dietaBean.Insert}" 
+							update=":formTabela:tabelaDieta :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgCadastrarDieta').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+		</p:dialog>
+		
+		<p:dialog header="Excluir Dieta" widgetVar="dlgExcluirDieta" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fExcluirDieta" >
+		        
+		        <p:outputPanel id="pgExcluirDieta" style="text-align:center;">
+		            
+		            <p:panelGrid  columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Refeição 1" />
+		                <h:outputText value="#{dietaBean.dieta.refeicao_1}" />
+		                
+		                <h:outputText value="Refeição 2" />
+		                <h:outputText value="#{dietaBean.dieta.refeicao_2}" />
+		                
+		                <h:outputText value="Refeição 3" />
+		                <h:outputText value="#{dietaBean.dieta.refeicao_3}" />
+		                
+		                <h:outputText value="Refeição 4" />
+		                <h:outputText value="#{dietaBean.dieta.refeicao_4}" />
+		                
+		                <h:outputText value="Refeição 5" />
+		                <h:outputText value="#{dietaBean.dieta.refeicao_5}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Excluir" oncomplete="PF('dlgExcluirDieta').hide();" 
+							actionListener="#{dietaBean.Delete}" 
+							update=":formTabela:tabelaDieta :msgGlobal" />
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgExcluirDieta').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+ 		
+ 		<p:dialog header="Alterar Dieta" widgetVar="dlgAlterarDieta" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fAlterar" >
+		        
+		        <p:outputPanel id="pgAlterar" style="text-align:center;">
+		            
+		            <p:panelGrid columns="2" columnClasses="label,value">
+
+		               
+		                <h:outputText value="Refeição 1" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_1}" />
+		                
+		                <h:outputText value="Refeição 2" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_2}" />
+		                
+		                <h:outputText value="Refeição 3" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_3}" />
+		                
+		                <h:outputText value="Refeição 4" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_4}" />
+		                
+		                <h:outputText value="Refeição 5" />
+		                <p:inputText value="#{dietaBean.dieta.refeicao_5}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Alterar" oncomplete="PF('dlgAlterarDieta').hide();" 
+							actionListener="#{dietaBean.Update}" 
+							update=":formTabela:tabelaDieta :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgAlterarDieta').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+		
+	</ui:define>
+	
+	<ui:define name="rodape">
+	   <ui:include src="/templates/rodape.xhtml" />
+	</ui:define>
+
+</ui:composition>

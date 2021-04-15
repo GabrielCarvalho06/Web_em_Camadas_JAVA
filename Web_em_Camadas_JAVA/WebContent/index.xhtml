@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template.xhtml"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/templates/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+	    <ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo" id="conteudo">
+		<center>
+		<br/>
+		<br/>
+		<p:chart type="pie" model="#{clienteBean.pieModel2}" style="width:600px;height:400px"/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<h3>Multimidia</h3>
+		<p:imageSwitch effect="fade" id="fadeEffect">
+    		<ui:repeat value="#{primeiroBean.images}" var="image" id="fadeEffectImages">
+        		<p:graphicImage library="images" name="#{image}" id="image" />
+   			</ui:repeat>
+		</p:imageSwitch>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<h3>Sidebar</h3>
+		<p:sidebar widgetVar="sidebar3" position="top" baseZIndex="10000">
+		    <h1 style="font-weight:normal">Top Sidebar</h1>
+		    <p:commandButton value="Cancel" oncomplete="PF('sidebar3').hide()"/>
+		</p:sidebar>
+		<p:commandButton icon="pi pi-arrow-down" oncomplete="PF('sidebar3').show()" />
+		</center>
+	</ui:define>
+	<ui:define name="rodape">
+	   <ui:include src="/templates/rodape.xhtml" />
+	</ui:define>
+
+</ui:composition>

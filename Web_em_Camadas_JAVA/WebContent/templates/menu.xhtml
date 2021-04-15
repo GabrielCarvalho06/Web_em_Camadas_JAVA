@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+	
+	<h:form>
+		<p:menu style="width:auto" toggleable="false">
+			<p:menuitem value="HOME" icon="pi pi-home" 
+					url="./index.jsf" />
+		</p:menu>
+		<p:menu style="width:auto" toggleable="true">
+			
+			<p:submenu label="Cadastro" expanded="false">
+					
+				<p:menuitem value="Clientes" icon="pi pi-user-edit" 
+					url="./pag_pessoas.jsf" />
+				
+				<p:menuitem value="Nutricionistas" icon="pi pi-user-edit"
+					url="./nutricionistas.jsf" />
+					
+				<p:menuitem value="Dietas" icon="pi pi-user-edit"
+					url="./dietas.jsf" />
+					
+				<p:menuitem value="Clinicas" icon="pi pi-user-edit"
+					url="./clinicas.jsf" />
+
+			</p:submenu>
+		</p:menu>
+		
+	</h:form>
+	
+</ui:composition>

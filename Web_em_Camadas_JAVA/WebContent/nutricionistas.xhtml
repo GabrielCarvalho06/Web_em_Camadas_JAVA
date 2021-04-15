@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"
+		xmlns:f="http://xmlns.jcp.org/jsf/core"
+		xmlns:p="http://primefaces.org/ui"
+		template="/templates/template.xhtml"
+		xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/templates/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+	    <ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		
+		<h:form id="formTabela">
+			<p:dataTable id="tabelaNutricionistas" var="nutricionista" value="#{nutricionistaBean.listaModelnutricionistas}"
+			 		rows="10"
+		            paginator="true"
+		            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 	currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+		            rowsPerPageTemplate="5,10,15" 
+		            filteredValue="#{nutricionistaBean.listaFiltradaModelNutricionistas}"
+		            emptyMessage="Nenhum nutricionista cadastrado no banco de dados" >
+		            
+				    <p:column filterBy="#{nutricionista.nome}" 
+			    	headerText="Nome" footerText="contains" 
+			    	filterMatchMode="contains" >
+			        	
+			        	<h:outputText value="#{nutricionista.nome}" />
+			   		</p:column>
+
+				 
+				    <p:column headerText="Idade">
+				        <h:outputText value="#{nutricionista.idade}" />
+				    </p:column>
+				 
+				    <p:column headerText="Sexo">
+				        <h:outputText value="#{nutricionista.sexo}" />
+				    </p:column>
+				    
+				    <p:column headerText="Cpf">
+				        <h:outputText value="#{nutricionista.cpf}" />
+				    </p:column>
+				    
+				    <p:column headerText="Crn">
+				        <h:outputText value="#{nutricionista.crn}" />
+				    </p:column>		
+				    
+				    <p:column headerText="E-mail">
+				        <h:outputText value="#{nutricionista.email}" />
+				    </p:column>
+				    
+				    <p:column headerText="*">
+		            
+			            <p:commandButton icon="pi pi-pencil"
+			            	actionListener="#{nutricionistaBean.PrepararUpdate}"
+				    		onclick="PF('dlgAlterarNutricionista').show()"
+				    		update=":fAlterar:pgAlterar" />
+			            	
+			            <p:commandButton icon="pi pi-trash" 
+			            	actionListener="#{nutricionistaBean.PrepararDelete}"
+			            	onclick="PF('dlgExcluirNutricionista').show();"
+				    		update=":fExcluirNutricionista:pgExcluirNutricionista" />
+			    		
+		       		</p:column>
+				    <f:facet name="footer">
+				    	<p:commandButton value="Novo nutricionista" icon="pi pi-user-plus"
+				    	actionListener="#{nutricionistaBean.PrepararNovo}"
+				    	oncomplete="PF('dlgCadastrarNutricionista').show();"
+				    	update=":fCadastrar:pgCadastrar" />
+				    </f:facet>	        
+			</p:dataTable>
+		</h:form>
+		<p:dialog header="Cadastrar Nutricionista" widgetVar="dlgCadastrarNutricionista" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fCadastrar" >
+		        
+		        <p:outputPanel id="painelCadastrarNutricionista" style="text-align:center;">
+		            
+		            <p:panelGrid id="pgCadastrar" columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Nome" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.nome}" />
+		                
+		                <h:outputText value="Idade" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.idade}" />
+		                
+		                <h:outputText value="Sexo" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.sexo}" />
+		                
+		                <h:outputText value="Cpf" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.cpf}" />
+		 
+		                <h:outputText value="Crn" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.crn}" />
+		                
+		                <h:outputText value="E-mail" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.email}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Cadastrar" oncomplete="PF('dlgCadastrarNutricionista').hide();" 
+							actionListener="#{nutricionistaBean.Insert}" 
+							update=":formTabela:tabelaNutricionistas :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgCadastrarNutricionista').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+		</p:dialog>
+		
+		<p:dialog header="Excluir Nutricionista" widgetVar="dlgExcluirNutricionista" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fExcluirNutricionista" >
+		        
+		        <p:outputPanel id="pgExcluirNutricionista" style="text-align:center;">
+		            
+		            <p:panelGrid  columns="2" columnClasses="label,value">
+		               
+		                <h:outputText value="Nome" />
+		                <h:outputText value="#{nutricionistaBean.nutricionista.nome}" />
+		                
+		                <h:outputText value="Idade" />
+		                <h:outputText value="#{nutricionistaBean.nutricionista.idade}" />
+		                
+		                <h:outputText value="Sexo" />
+		                <h:outputText value="#{nutricionistaBean.nutricionista.sexo}" />
+		                
+		                <h:outputText value="Cpf" />
+		                <h:outputText value="#{nutricionistaBean.nutricionista.cpf}" />
+		 
+		                <h:outputText value="Crn" />
+		                <h:outputText value="#{nutricionistaBean.nutricionista.crn}" />
+		                
+		                <h:outputText value="E-mail" />
+		                <h:outputText value="#{nutricionistaBean.nutricionista.email}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Excluir" oncomplete="PF('dlgExcluirNutricionista').hide();" 
+							actionListener="#{nutricionistaBean.Delete}" 
+							update=":formTabela:tabelaNutricionistas :msgGlobal" />
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgExcluirNutricionista').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+ 		
+ 		<p:dialog header="Alterar Nutricionista" widgetVar="dlgAlterarNutricionista" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+	       
+	        <h:form id="fAlterar" >
+		        
+		        <p:outputPanel id="pgAlterar" style="text-align:center;">
+		            
+		            <p:panelGrid columns="2" columnClasses="label,value">
+
+		               
+		                <h:outputText value="Nome" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.nome}" />
+		                
+		                <h:outputText value="Idade" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.idade}" />
+		                
+		                <h:outputText value="Sexo" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.sexo}" />
+		                
+		                <h:outputText value="Cpf" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.cpf}" />
+		 
+		                <h:outputText value="Crn" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.crn}" />
+		                
+		                <h:outputText value="E-mail" />
+		                <p:inputText value="#{nutricionistaBean.nutricionista.email}" />
+		                
+		            </p:panelGrid>
+		            
+		            <h:panelGrid columns="2">
+				
+						<p:commandButton value="Alterar" oncomplete="PF('dlgAlterarNutricionista').hide();" 
+							actionListener="#{nutricionistaBean.Update}" 
+							update=":formTabela:tabelaNutricionistas :msgGlobal"/>
+					
+						<p:commandButton value="Cancel" onclick="PF('dlgAlterarNutricionista').hide();" />
+					
+					</h:panelGrid>
+		            
+		        </p:outputPanel>
+		        
+	        </h:form>
+	        
+    	</p:dialog>
+		
+	</ui:define>
+	
+	<ui:define name="rodape">
+	   <ui:include src="/templates/rodape.xhtml" />
+	</ui:define>
+
+</ui:composition>
